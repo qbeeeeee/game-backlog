@@ -128,3 +128,21 @@
     @apply font-sans;
   }
 }
+
+.scrollbar-arcade::-webkit-scrollbar {
+  width: 6px;
+}
+
+.scrollbar-arcade::-webkit-scrollbar-track {
+  background: black;
+  border-radius: 8px;
+}
+
+.scrollbar-arcade::-webkit-scrollbar-thumb {
+  background: #06b6d4; /* This is Tailwind's cyan-500 */
+  border-radius: 8px;
+}
+
+.scrollbar-arcade::-webkit-scrollbar-thumb:hover {
+  background: #22d3ee; /* cyan-400 */
+}

@@ -4,10 +4,12 @@ import Link from "next/link";
 import { usePathname, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
+import { LogoutButton } from "@/components/auth/LogoutButton";
 import {
   DASHBOARD_CATEGORIES,
   DASHBOARD_CATEGORY_META,
   parseDashboardCategory,
+  parseDashboardCategoryStrict,
 } from "@/lib/dashboard-categories";
 import { cn } from "@/lib/utils";
 
@@ -17,10 +19,11 @@ export function MobileCategoryMenu() {
   const pathname = usePathname();
   const searchParams = useSearchParams();
 
+  const pathnameCategory = parseDashboardCategoryStrict(
+    pathname.match(/^\/dashboard\/([^/]+)/)?.[1],
+  );
   const activeCategory =
-    pathname !== "/dashboard" && pathname.startsWith("/dashboard/")
-      ? "games"
-      : parseDashboardCategory(searchParams.get("category"));
+    pathnameCategory ?? parseDashboardCategory(searchParams.get("category"));
 
   useEffect(() => {
     setIsOpen(false);
@@ -56,7 +59,7 @@ export function MobileCategoryMenu() {
     <>
       <div
         className={cn(
-          "fixed inset-0 z-[90] bg-black/60 transition-opacity",
+          "fixed inset-0 z-90 bg-black/60 transition-opacity",
           isOpen ? "opacity-100" : "pointer-events-none opacity-0",
         )}
         onClick={() => setIsOpen(false)}
@@ -66,7 +69,7 @@ export function MobileCategoryMenu() {
       <aside
         id="mobile-category-drawer"
         className={cn(
-          "fixed right-0 top-0 z-[100] h-screen w-[88vw] max-w-[340px] border-l border-gray-800 bg-gray-950 p-5 shadow-2xl transition-transform",
+          "fixed right-0 top-0 z-100 h-screen w-[88vw] max-w-85 border-l border-gray-800 bg-gray-950 p-5 shadow-2xl transition-transform",
           isOpen ? "translate-x-0" : "translate-x-full",
         )}
         aria-label="Mobile category menu"
@@ -91,7 +94,7 @@ export function MobileCategoryMenu() {
             return (
               <Link
                 key={category}
-                href={`/dashboard?category=${category}`}
+                href={`/dashboard/${category}`}
                 className={cn(
                   "block rounded-md px-3 py-3 text-xs font-semibold uppercase tracking-[0.22em]",
                   isActive
@@ -105,14 +108,9 @@ export function MobileCategoryMenu() {
           })}
         </nav>
 
-        <div className="mt-6 border-t border-gray-800 pt-4">
-          <Link
-            href="/"
-            className="block rounded-md px-3 py-3 text-xs font-semibold uppercase tracking-[0.22em] text-gray-300 hover:bg-gray-900 hover:text-white"
-          >
-            Exit
-          </Link>
-        </div>
+        <ul className="flex items-center gap-2 list-none mt-6 border-t border-gray-800 pt-4">
+          <LogoutButton />
+        </ul>
       </aside>
     </>
   );

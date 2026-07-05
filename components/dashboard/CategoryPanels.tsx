@@ -187,7 +187,7 @@ function YoutubePanel() {
 
 export function CategoryPanels({ category }: { category: DashboardCategory }) {
   if (category === "games") {
-    return <DashboardContent />;
+    return <DashboardContent category={category} />;
   }
 
   if (category === "movies") {

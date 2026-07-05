@@ -3,33 +3,24 @@
 import Link from "next/link";
 import { usePathname, useSearchParams } from "next/navigation";
 import { Badge } from "@/components/ui/badge";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { LogoutButton } from "@/components/auth/LogoutButton";
 import {
   DASHBOARD_CATEGORIES,
   DASHBOARD_CATEGORY_META,
   parseDashboardCategory,
+  parseDashboardCategoryStrict,
 } from "@/lib/dashboard-categories";
 import { cn } from "@/lib/utils";
 
 export function CategorySidebar() {
   const pathname = usePathname();
   const searchParams = useSearchParams();
-  const profile = {
-    firstName: "Kyuubi",
-    lastName: "Player",
-    imageUrl: "",
-  };
 
-  const initials = `${profile.firstName?.charAt(0) ?? ""}${
-    profile.lastName?.charAt(0) ?? ""
-  }`
-    .toUpperCase()
-    .trim();
-
+  const pathnameCategory = parseDashboardCategoryStrict(
+    pathname.match(/^\/dashboard\/([^/]+)/)?.[1],
+  );
   const activeCategory =
-    pathname !== "/dashboard" && pathname.startsWith("/dashboard/")
-      ? "games"
-      : parseDashboardCategory(searchParams.get("category"));
+    pathnameCategory ?? parseDashboardCategory(searchParams.get("category"));
 
   return (
     <aside className="space-y-3 h-full" aria-label="Backlog categories">
@@ -64,7 +55,7 @@ export function CategorySidebar() {
               return (
                 <Link
                   key={category}
-                  href={`/dashboard?category=${category}`}
+                  href={`/dashboard/${category}`}
                   className={cn(
                     "group flex items-center justify-between rounded-md px-3 py-3 transition-colors",
                     "text-xs font-semibold uppercase tracking-[0.22em]",
@@ -112,23 +103,8 @@ export function CategorySidebar() {
                 Dashboard
               </Link>
             </li> */}
-            <li>
-              <Avatar className="size-9 border border-purple-300/30">
-                <AvatarImage
-                  src={profile.imageUrl || undefined}
-                  alt={`${profile.firstName} ${profile.lastName}`}
-                />
-                <AvatarFallback>{initials || "U"}</AvatarFallback>
-              </Avatar>
-            </li>
-            <li>
-              <Link
-                href="/"
-                className="text-xs px-3 tracking-widest uppercase border-gray-700 text-gray-300 hover:text-white"
-              >
-                Exit
-              </Link>
-            </li>
+
+            <LogoutButton />
           </ul>
         </div>
       </nav>

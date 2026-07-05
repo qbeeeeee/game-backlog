@@ -1,0 +1,70 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+enum MediaType {
+  GAME
+  MOVIE
+  SERIES
+  ANIME
+  YOUTUBE
+}
+
+enum TrackStatus {
+  BACKLOG
+  IN_PROGRESS
+  COMPLETED
+  PAUSED
+  DROPPED
+}
+
+model User {
+  id           String       @id @default(cuid())
+  email        String       @unique
+  passwordHash String
+  displayName  String?
+  avatarUrl    String?
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime     @updatedAt
+  profile      Profile?
+  trackedItems TrackedItem[]
+}
+
+model Profile {
+  id        String   @id @default(cuid())
+  userId    String   @unique
+  bio       String?
+  location  String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model TrackedItem {
+  id              String      @id @default(cuid())
+  userId          String
+  mediaType       MediaType
+  status          TrackStatus @default(BACKLOG)
+  title           String
+  externalId      String?
+  source          String?
+  notes           String?
+  rating          Int?
+  progressCurrent Int?
+  progressTotal   Int?
+  startedAt       DateTime?
+  completedAt     DateTime?
+  metadata        Json?
+  createdAt       DateTime    @default(now())
+  updatedAt       DateTime    @updatedAt
+  user            User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, mediaType])
+  @@index([userId, status])
+  @@index([userId, createdAt])
+}

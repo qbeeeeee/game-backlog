@@ -38,7 +38,7 @@ export function LoggedInShell({
       <main className="w-full">
         <div className="lg:grid lg:min-h-screen lg:grid-cols-[270px_minmax(0,1fr)]">
           <aside className="hidden border-r border-gray-800/70 bg-black/20 lg:block">
-            <div className="fixed top-0 h-full w-[270px] overflow-y-auto px-4 py-6">
+            <div className="fixed top-0 h-full w-67.5 overflow-y-auto px-4 py-6">
               {desktopSidebar}
             </div>
           </aside>

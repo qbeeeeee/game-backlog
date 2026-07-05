@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { useQuery } from "@tanstack/react-query";
 import { fetchDashboardGameDetail, gameKeys } from "@/lib/game-api";
+import type { DashboardCategory } from "@/lib/dashboard-categories";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -14,9 +15,11 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
+import Image from "next/image";
 
 interface GameDetailContentProps {
   gameId: string;
+  category: DashboardCategory;
 }
 
 function DetailSkeleton() {
@@ -48,7 +51,10 @@ function InfoTile({ label, value }: { label: string; value: string | number }) {
   );
 }
 
-export function GameDetailContent({ gameId }: GameDetailContentProps) {
+export function GameDetailContent({
+  gameId,
+  category,
+}: GameDetailContentProps) {
   const searchParams = useSearchParams();
   const igdbId = searchParams.get("igdbId");
 
@@ -79,7 +85,7 @@ export function GameDetailContent({ gameId }: GameDetailContentProps) {
           <Button
             variant="outline"
             className="mt-6 border-red-500/50 text-red-200 hover:bg-red-950/50"
-            render={<Link href="/dashboard" />}
+            render={<Link href={`/dashboard/${category}`} />}
           >
             Back to dashboard
           </Button>
@@ -91,7 +97,7 @@ export function GameDetailContent({ gameId }: GameDetailContentProps) {
   return (
     <Card className="rounded-3xl border-gray-800 bg-gray-950/80 shadow-[0_0_40px_rgba(34,211,238,0.08)]">
       <CardContent>
-        <div className="flex flex-col gap-6 lg:flex-row lg:items-start lg:justify-between">
+        <div className="flex gap-6 lg:flex-row lg:items-start lg:justify-between">
           <div className="max-w-2xl">
             <Badge
               variant="outline"
@@ -102,14 +108,34 @@ export function GameDetailContent({ gameId }: GameDetailContentProps) {
             <h1 className="mt-3 text-4xl font-bold uppercase tracking-[0.08em] text-white">
               {game.title}
             </h1>
-            <p className="mt-4 text-sm leading-7 text-gray-300">
+            <p className="mt-4 text-sm uppercase tracking-[0.24em] text-gray-600">
+              Description
+            </p>
+            <p className="mt-2 text-sm leading-7 text-gray-300 overflow-y-auto max-h-40 scrollbar-arcade pr-4">
               {game.summary}
             </p>
+            <p className="mt-4 text-sm uppercase tracking-[0.24em] text-gray-600">
+              Story Line
+            </p>
             {game.storyline ? (
-              <p className="mt-3 text-sm leading-7 text-gray-400">
+              <p className="mt-2 text-sm leading-7 text-gray-300 overflow-y-auto max-h-40 scrollbar-arcade pr-4">
                 {game.storyline}
               </p>
             ) : null}
+          </div>
+
+          <div className="relative w-full max-w-40 overflow-hidden rounded-2xl aspect-3/4 bg-gray-900">
+            {game.coverUrl ? (
+              <Image
+                src={game.coverUrl}
+                alt={`${game.title} cover`}
+                fill
+                sizes="(max-width: 640px) 70vw, 160px"
+                className="object-contain"
+              />
+            ) : (
+              <div className="h-full w-full animate-pulse bg-gray-800" />
+            )}
           </div>
         </div>
 

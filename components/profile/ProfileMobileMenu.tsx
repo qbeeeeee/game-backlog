@@ -1,8 +1,8 @@
 "use client";
 
-import Link from "next/link";
 import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
+import { LogoutButton } from "@/components/auth/LogoutButton";
 import { cn } from "@/lib/utils";
 
 export function ProfileMobileMenu() {
@@ -39,7 +39,7 @@ export function ProfileMobileMenu() {
     <>
       <div
         className={cn(
-          "fixed inset-0 z-[90] bg-black/60 transition-opacity",
+          "fixed inset-0 z-90 bg-black/60 transition-opacity",
           isOpen ? "opacity-100" : "pointer-events-none opacity-0",
         )}
         onClick={() => setIsOpen(false)}
@@ -48,7 +48,7 @@ export function ProfileMobileMenu() {
 
       <aside
         className={cn(
-          "fixed right-0 top-0 z-[100] h-screen w-[88vw] max-w-[340px] border-l border-gray-800 bg-gray-950 p-5 shadow-2xl transition-transform",
+          "fixed right-0 top-0 z-100 h-screen w-[88vw] max-w-85 border-l border-gray-800 bg-gray-950 p-5 shadow-2xl transition-transform",
           isOpen ? "translate-x-0" : "translate-x-full",
         )}
         aria-label="Mobile profile menu"
@@ -72,14 +72,9 @@ export function ProfileMobileMenu() {
           </p>
         </div>
 
-        <div className="mt-6 border-t border-gray-800 pt-4">
-          <Link
-            href="/"
-            className="block rounded-md px-3 py-3 text-xs font-semibold uppercase tracking-[0.22em] text-gray-300 hover:bg-gray-900 hover:text-white"
-          >
-            Exit
-          </Link>
-        </div>
+        <ul className="flex items-center gap-2 list-none mt-6 border-t border-gray-800 pt-4">
+          <LogoutButton />
+        </ul>
       </aside>
     </>
   );

@@ -1,5 +1,6 @@
 import Link from "next/link";
 import type { DashboardGame } from "@/lib/game-api";
+import type { DashboardCategory } from "@/lib/dashboard-categories";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
@@ -34,12 +35,13 @@ function shortenText(text: string, maxLength: number) {
 
 interface GameCardProps {
   game: DashboardGame;
+  category: DashboardCategory;
 }
 
 // ---------------------------------------------------------------------------
 // GameCard — displays a single game entry in the backlog grid.
 // ---------------------------------------------------------------------------
-export function GameCard({ game }: GameCardProps) {
+export function GameCard({ game, category }: GameCardProps) {
   const statusLabel = game.status || "Unassigned";
   const canOpenDetail = Boolean(game.igdbId);
   const query = new URLSearchParams();
@@ -49,8 +51,8 @@ export function GameCard({ game }: GameCardProps) {
   }
 
   const href = query.toString()
-    ? `/dashboard/${game.id}?${query.toString()}`
-    : `/dashboard/${game.id}`;
+    ? `/dashboard/${category}/${game.id}?${query.toString()}`
+    : `/dashboard/${category}/${game.id}`;
   const card = (
     <div className="group block h-full max-h-75">
       <Card className="relative h-full border-gray-700/60 bg-gray-900 transition-all duration-200 group-hover:border-purple-500/60 group-hover:shadow-[0_0_20px_rgba(168,85,247,0.2)]">
@@ -59,7 +61,7 @@ export function GameCard({ game }: GameCardProps) {
             {game.title}
           </CardTitle>
 
-          <p className="text-xs text-gray-500 font-mono mt-1 h-[50px] line-clamp-3 overflow-hidden">
+          <p className="text-xs text-gray-500 font-mono mt-1 h-12.5 line-clamp-3 overflow-hidden">
             {shortenText(game.summary, 110)}
           </p>
         </CardHeader>

@@ -1,5 +1,5 @@
-import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
+import { LogoutButton } from "@/components/auth/LogoutButton";
 
 export function ProfileSidebar() {
   return (
@@ -31,14 +31,9 @@ export function ProfileSidebar() {
           </div>
         </div>
 
-        <div className="pt-6">
-          <Link
-            href="/"
-            className="text-xs px-3 tracking-widest uppercase text-gray-300 hover:text-white"
-          >
-            Exit
-          </Link>
-        </div>
+        <ul className="flex items-center gap-2 list-none">
+          <LogoutButton />
+        </ul>
       </div>
     </aside>
   );

@@ -25,6 +25,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
+import type { DashboardCategory } from "@/lib/dashboard-categories";
 
 // ---------------------------------------------------------------------------
 // Filter type — "All" is a UI-only value for dashboard filtering
@@ -79,7 +80,7 @@ function ResultsAreaSkeleton() {
 // ---------------------------------------------------------------------------
 // Main dashboard content component
 // ---------------------------------------------------------------------------
-export function DashboardContent() {
+export function DashboardContent({ category }: { category: DashboardCategory }) {
   const searchParams = useSearchParams();
   const statusParam = searchParams.get("status");
   const queryParam = searchParams.get("q") ?? "";
@@ -245,7 +246,7 @@ export function DashboardContent() {
             >
               {safeGames.map((game) => (
                 <li key={game.id}>
-                  <GameCard game={game} />
+                  <GameCard game={game} category={category} />
                 </li>
               ))}
             </ul>

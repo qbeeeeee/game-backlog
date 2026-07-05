@@ -20,6 +20,65 @@ You can start editing the page by modifying `app/page.tsx`. The page auto-update
 
 This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
+## Backend Setup (Auth + Tracker)
+
+This project now includes a backend using Next.js Route Handlers + Prisma + SQLite.
+
+### 1) Environment variables
+
+Use `.env.example` as reference and make sure these variables exist in `.env`:
+
+```env
+DATABASE_URL="file:./dev.db"
+JWT_SECRET="replace-with-a-long-random-secret"
+```
+
+### 2) Create the database
+
+```bash
+npm run db:migrate
+```
+
+### 3) Generate Prisma client
+
+```bash
+npm run prisma:generate
+```
+
+## API Endpoints
+
+All endpoints live under `app/api`.
+
+- `POST /api/auth/signup`
+- `POST /api/auth/login`
+- `POST /api/auth/logout`
+- `GET /api/auth/me`
+- `GET /api/profile`
+- `PATCH /api/profile`
+- `GET /api/tracker/items`
+- `POST /api/tracker/items`
+- `PATCH /api/tracker/items/:id`
+- `DELETE /api/tracker/items/:id`
+- `GET /api/tracker/stats`
+
+## Tracker Enums
+
+Supported media types:
+
+- `GAME`
+- `MOVIE`
+- `SERIES`
+- `ANIME`
+- `YOUTUBE`
+
+Supported statuses:
+
+- `BACKLOG`
+- `IN_PROGRESS`
+- `COMPLETED`
+- `PAUSED`
+- `DROPPED`
+
 ## Learn More
 
 To learn more about Next.js, take a look at the following resources:

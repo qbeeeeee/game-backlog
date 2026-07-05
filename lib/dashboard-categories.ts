@@ -48,3 +48,16 @@ export function parseDashboardCategory(
     ? (normalized as DashboardCategory)
     : "games";
 }
+
+export function parseDashboardCategoryStrict(
+  value: string | null | undefined,
+): DashboardCategory | null {
+  if (!value) {
+    return null;
+  }
+
+  const normalized = value.toLowerCase();
+  return DASHBOARD_CATEGORIES.includes(normalized as DashboardCategory)
+    ? (normalized as DashboardCategory)
+    : null;
+}
