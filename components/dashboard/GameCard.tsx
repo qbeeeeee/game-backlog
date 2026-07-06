@@ -45,6 +45,7 @@ export function GameCard({ game, category }: GameCardProps) {
   const statusLabel = game.status || "Unassigned";
   const canOpenDetail = Boolean(game.igdbId);
   const query = new URLSearchParams();
+  query.set("title", game.title);
 
   if (game.igdbId) {
     query.set("igdbId", game.igdbId);

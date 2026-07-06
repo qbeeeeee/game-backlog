@@ -5,6 +5,7 @@ import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 import {
   DASHBOARD_CATEGORY_META,
+  DASHBOARD_MEDIA_TYPE_BY_CATEGORY,
   parseDashboardCategoryStrict,
 } from "@/lib/dashboard-categories";
 import { notFound } from "next/navigation";
@@ -28,15 +29,24 @@ export async function generateMetadata({
 
 export default async function DashboardCategoryDetailPage({
   params,
+  searchParams,
 }: {
   params: Promise<{ category: string; id: string }>;
+  searchParams: Promise<{
+    igdbId?: string | string[];
+    title?: string | string[];
+  }>;
 }) {
   const { category: categoryParam, id } = await params;
+  const { igdbId, title } = await searchParams;
   const category = parseDashboardCategoryStrict(categoryParam);
 
   if (!category) {
     notFound();
   }
+
+  const normalizedIgdbId = Array.isArray(igdbId) ? igdbId[0] : igdbId;
+  const normalizedTitle = Array.isArray(title) ? title[0] : title;
 
   return (
     <div className="mx-auto max-w-6xl">
@@ -61,7 +71,12 @@ export default async function DashboardCategoryDetailPage({
           </h1>
         </div>
 
-        <AddToLibrary />
+        <AddToLibrary
+          mediaType={DASHBOARD_MEDIA_TYPE_BY_CATEGORY[category]}
+          title={normalizedTitle ?? id}
+          externalId={normalizedIgdbId}
+          source={normalizedIgdbId ? "IGDB" : undefined}
+        />
       </div>
 
       <GameDetailContent gameId={id} category={category} />

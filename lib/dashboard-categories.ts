@@ -8,6 +8,24 @@ export const DASHBOARD_CATEGORIES = [
 
 export type DashboardCategory = (typeof DASHBOARD_CATEGORIES)[number];
 
+export type DashboardMediaType =
+  | "GAME"
+  | "MOVIE"
+  | "SERIES"
+  | "ANIME"
+  | "YOUTUBE";
+
+export const DASHBOARD_MEDIA_TYPE_BY_CATEGORY: Record<
+  DashboardCategory,
+  DashboardMediaType
+> = {
+  games: "GAME",
+  movies: "MOVIE",
+  series: "SERIES",
+  animes: "ANIME",
+  youtube: "YOUTUBE",
+};
+
 export const DASHBOARD_CATEGORY_META: Record<
   DashboardCategory,
   { label: string; description: string }

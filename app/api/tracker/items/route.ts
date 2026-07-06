@@ -29,6 +29,8 @@ export async function GET(request: NextRequest) {
       userId,
       mediaType: query.mediaType,
       status: query.status,
+      externalId: query.externalId,
+      source: query.source,
       title: query.search
         ? {
             contains: query.search,

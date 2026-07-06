@@ -1,4 +1,42 @@
+import {
+  fetchTrackedItems,
+  mergeTrackedStatusesByExternalIdOrTitle,
+  normalizeForCompare,
+  toTrackedStatusFilter,
+  type TrackedItemStatus,
+  type TrackedItemSummary,
+} from "@/lib/tracker-client";
+
 export type DashboardGameStatus = "" | "Backlog" | "Playing" | "Completed";
+export type DashboardTrackedItemStatus = TrackedItemStatus;
+export type DashboardAssignableStatus = Exclude<DashboardGameStatus, "">;
+
+export const DASHBOARD_TO_TRACKED_STATUS: Record<
+  DashboardAssignableStatus,
+  DashboardTrackedItemStatus
+> = {
+  Backlog: "BACKLOG",
+  Playing: "IN_PROGRESS",
+  Completed: "COMPLETED",
+};
+
+export function trackedToDashboardStatus(
+  status: DashboardTrackedItemStatus,
+): DashboardGameStatus {
+  if (status === "BACKLOG") {
+    return "Backlog";
+  }
+
+  if (status === "IN_PROGRESS") {
+    return "Playing";
+  }
+
+  if (status === "COMPLETED") {
+    return "Completed";
+  }
+
+  return "";
+}
 
 export interface DashboardGame {
   id: string;
@@ -19,7 +57,7 @@ export interface DashboardGameDetail extends DashboardGame {
 }
 
 export interface GamesFilters {
-  status?: DashboardGameStatus | "All";
+  status?: DashboardAssignableStatus | "All";
   query?: string;
 }
 
@@ -55,6 +93,76 @@ interface TwitchIgdbGamesResponse {
   pagination?: {
     cursor?: string;
   };
+}
+
+async function fetchTrackedItemsForGames(
+  filters: GamesFilters,
+): Promise<TrackedItemSummary[]> {
+  const trackedStatus = toTrackedStatusFilter(
+    filters.status,
+    DASHBOARD_TO_TRACKED_STATUS,
+  );
+
+  return fetchTrackedItems({
+    mediaType: "GAME",
+    status: trackedStatus,
+    query: filters.query,
+    limit: 100,
+  });
+}
+
+async function mapTrackedItemsToDashboardGames(
+  trackedItems: TrackedItemSummary[],
+): Promise<DashboardGame[]> {
+  const detailResults = await Promise.allSettled(
+    trackedItems.map(async (item) => {
+      if (item.source === "IGDB" && item.externalId) {
+        const detail = await fetchDashboardGameDetail(
+          item.externalId,
+          item.externalId,
+        );
+
+        return {
+          ...detail,
+          id: item.externalId,
+          igdbId: item.externalId,
+          title: item.title || detail.title,
+          status: trackedToDashboardStatus(item.status),
+        } satisfies DashboardGame;
+      }
+
+      return {
+        id: item.externalId ?? item.id,
+        igdbId: item.externalId ?? null,
+        title: item.title,
+        genre: "Unknown",
+        type: "General",
+        status: trackedToDashboardStatus(item.status),
+        releaseYear: new Date().getUTCFullYear(),
+        summary: "No description available.",
+        rating: 0,
+      } satisfies DashboardGame;
+    }),
+  );
+
+  return detailResults.flatMap((result) =>
+    result.status === "fulfilled" ? [result.value] : [],
+  );
+}
+
+function mergeTrackedStatuses(
+  games: DashboardGame[],
+  trackedItems: TrackedItemSummary[],
+): DashboardGame[] {
+  return mergeTrackedStatusesByExternalIdOrTitle(games, trackedItems, {
+    getExternalId: (game) => game.igdbId,
+    getTitle: (game) => game.title,
+    setStatus: (game, status) => ({
+      ...game,
+      status: status as DashboardGameStatus,
+    }),
+    trackedToUiStatus: trackedToDashboardStatus,
+  });
 }
 
 function toDashboardGame(game: TwitchIgdbGame): DashboardGame {
@@ -106,6 +214,20 @@ function buildGamesUrl(filters: GamesFilters) {
 export async function fetchGames(
   filters: GamesFilters,
 ): Promise<DashboardGame[]> {
+  if (filters.status && filters.status !== "All") {
+    const trackedItems = await fetchTrackedItemsForGames(filters);
+    const trackedGames = await mapTrackedItemsToDashboardGames(trackedItems);
+
+    if (!filters.query) {
+      return trackedGames;
+    }
+
+    const query = normalizeForCompare(filters.query);
+    return trackedGames.filter((game) =>
+      normalizeForCompare(game.title).includes(query),
+    );
+  }
+
   const response = await fetch(buildGamesUrl(filters));
 
   if (!response.ok) {
@@ -114,12 +236,8 @@ export async function fetchGames(
 
   const payload = (await response.json()) as TwitchIgdbGamesResponse;
   const mappedGames = payload.data.map(toDashboardGame);
-
-  if (!filters.status || filters.status === "All") {
-    return mappedGames;
-  }
-
-  return mappedGames.filter((game) => game.status === filters.status);
+  const trackedItems = await fetchTrackedItemsForGames(filters);
+  return mergeTrackedStatuses(mappedGames, trackedItems);
 }
 
 export async function fetchDashboardGameDetail(

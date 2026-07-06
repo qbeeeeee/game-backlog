@@ -27,6 +27,8 @@ export const updateTrackedItemSchema = createTrackedItemSchema
 export const trackerQuerySchema = z.object({
   mediaType: z.nativeEnum(MediaType).optional(),
   status: z.nativeEnum(TrackStatus).optional(),
+  externalId: z.string().max(120).optional(),
+  source: z.string().max(60).optional(),
   search: z.string().max(200).optional(),
   page: z.coerce.number().int().min(1).default(1),
   limit: z.coerce.number().int().min(1).max(100).default(20),
