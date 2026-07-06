@@ -1,5 +1,5 @@
 import Link from "next/link";
-import type { DashboardGame } from "@/lib/game-api";
+import type { DashboardGame } from "@/lib/category-api";
 import type { DashboardCategory } from "@/lib/dashboard-categories";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -49,6 +49,10 @@ export function GameCard({ game, category }: GameCardProps) {
 
   if (game.igdbId) {
     query.set("igdbId", game.igdbId);
+  }
+
+  if (game.source) {
+    query.set("source", game.source);
   }
 
   const href = query.toString()

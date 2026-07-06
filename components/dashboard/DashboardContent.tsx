@@ -11,8 +11,8 @@
 
 import { useSearchParams } from "next/navigation";
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
-import { fetchGames, gameKeys } from "@/lib/game-api";
-import type { DashboardGame, DashboardGameStatus } from "@/lib/game-api";
+import { fetchCategoryItems, gameKeys } from "@/lib/category-api";
+import type { DashboardGame, DashboardGameStatus } from "@/lib/category-api";
 import { GameCard } from "@/components/dashboard/GameCard";
 import { SkeletonLoader } from "@/components/dashboard/SkeletonLoader";
 import { StatusFilterBar } from "@/components/dashboard/StatusFilterBar";
@@ -25,7 +25,10 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
-import type { DashboardCategory } from "@/lib/dashboard-categories";
+import {
+  DASHBOARD_CATEGORY_META,
+  type DashboardCategory,
+} from "@/lib/dashboard-categories";
 
 // ---------------------------------------------------------------------------
 // Filter type — "All" is a UI-only value for dashboard filtering
@@ -80,10 +83,18 @@ function ResultsAreaSkeleton() {
 // ---------------------------------------------------------------------------
 // Main dashboard content component
 // ---------------------------------------------------------------------------
-export function DashboardContent({ category }: { category: DashboardCategory }) {
+export function DashboardContent({
+  category,
+}: {
+  category: DashboardCategory;
+}) {
   const searchParams = useSearchParams();
   const statusParam = searchParams.get("status");
   const queryParam = searchParams.get("q") ?? "";
+  const categoryLabel = DASHBOARD_CATEGORY_META[category].label;
+  const singularCategoryLabel = categoryLabel.endsWith("s")
+    ? categoryLabel.slice(0, -1)
+    : categoryLabel;
 
   const activeFilter: StatusFilter =
     statusParam === "Backlog" ||
@@ -99,8 +110,15 @@ export function DashboardContent({ category }: { category: DashboardCategory }) 
     isError,
     error,
   } = useQuery<DashboardGame[], Error>({
-    queryKey: gameKeys.list({ status: activeFilter, query: queryParam }),
-    queryFn: () => fetchGames({ status: activeFilter, query: queryParam }),
+    queryKey: gameKeys.list(
+      { status: activeFilter, query: queryParam },
+      category,
+    ),
+    queryFn: () =>
+      fetchCategoryItems(category, {
+        status: activeFilter,
+        query: queryParam,
+      }),
     placeholderData: keepPreviousData,
   });
 
@@ -117,7 +135,7 @@ export function DashboardContent({ category }: { category: DashboardCategory }) 
           💥
         </span>
         <p className="text-red-400 text-lg tracking-wide uppercase">
-          GAME OVER — Failed to load data
+          GAME OVER — Failed to load {categoryLabel.toLowerCase()}
         </p>
         <p className="text-gray-500 text-sm">{error?.message}</p>
       </div>
@@ -136,28 +154,13 @@ export function DashboardContent({ category }: { category: DashboardCategory }) 
 
   return (
     <div className="flex flex-col gap-8 min-h-screen w-full">
-      <section className="rounded-2xl border border-cyan-500/20 bg-linear-to-r from-cyan-950/40 via-gray-950 to-purple-950/40 p-5">
-        <Badge
-          variant="outline"
-          className="border-cyan-500/40 text-cyan-300 uppercase tracking-widest"
-        >
-          Real project view
-        </Badge>
-        <p className="mt-3 max-w-3xl text-sm leading-7 text-gray-300">
-          This dashboard now behaves more like a production feature: the URL
-          owns filter state, React Query owns client caching and invalidation,
-          and the App Router owns route structure for the list page and dynamic
-          detail pages.
-        </p>
-      </section>
-
       {/* ------------------------------------------------------------------ */}
       {/* Summary Metrics                                                      */}
       {/* ------------------------------------------------------------------ */}
       <section aria-label="Summary metrics">
         <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
           <StatCard
-            label="Total Games"
+            label={`Total ${categoryLabel}`}
             value={totalGames}
             accent="border-gray-700/60"
           />
@@ -236,7 +239,7 @@ export function DashboardContent({ category }: { category: DashboardCategory }) 
                 🕹️
               </span>
               <p className="text-gray-600 text-sm uppercase tracking-widest">
-                No games in this category
+                No {singularCategoryLabel.toLowerCase()} in this category
               </p>
             </div>
           ) : !isResultsRefreshing ? (

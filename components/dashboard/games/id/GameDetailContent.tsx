@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { useQuery } from "@tanstack/react-query";
-import { fetchDashboardGameDetail, gameKeys } from "@/lib/game-api";
+import { fetchDashboardCategoryDetail, gameKeys } from "@/lib/category-api";
 import type { DashboardCategory } from "@/lib/dashboard-categories";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -56,7 +56,7 @@ export function GameDetailContent({
   category,
 }: GameDetailContentProps) {
   const searchParams = useSearchParams();
-  const igdbId = searchParams.get("igdbId");
+  const externalId = searchParams.get("igdbId");
 
   const {
     data: game,
@@ -64,8 +64,8 @@ export function GameDetailContent({
     isError,
     error,
   } = useQuery({
-    queryKey: gameKeys.detail(gameId, igdbId),
-    queryFn: () => fetchDashboardGameDetail(gameId, igdbId),
+    queryKey: gameKeys.detail(gameId, externalId, category),
+    queryFn: () => fetchDashboardCategoryDetail(category, gameId, externalId),
   });
 
   if (isLoading) {

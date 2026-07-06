@@ -8,7 +8,7 @@ import {
   DashboardTrackedItemStatus,
   gameKeys,
   trackedToDashboardStatus,
-} from "@/lib/game-api";
+} from "@/lib/category-api";
 import { DashboardMediaType } from "@/lib/dashboard-categories";
 
 import {

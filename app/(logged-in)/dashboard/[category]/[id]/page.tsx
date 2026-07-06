@@ -6,10 +6,25 @@ import { ArrowLeft } from "lucide-react";
 import {
   DASHBOARD_CATEGORY_META,
   DASHBOARD_MEDIA_TYPE_BY_CATEGORY,
+  type DashboardCategory,
   parseDashboardCategoryStrict,
 } from "@/lib/dashboard-categories";
 import { notFound } from "next/navigation";
 import AddToLibrary from "@/components/dashboard/AddToLibrary";
+import { inferSourceFromCategory } from "@/lib/category-api";
+
+function normalizeSourceParam(
+  value: string | string[] | undefined,
+  category: DashboardCategory,
+) {
+  const normalized = Array.isArray(value) ? value[0] : value;
+
+  if (normalized) {
+    return normalized;
+  }
+
+  return inferSourceFromCategory(category);
+}
 
 export const dynamicParams = true;
 
@@ -35,10 +50,11 @@ export default async function DashboardCategoryDetailPage({
   searchParams: Promise<{
     igdbId?: string | string[];
     title?: string | string[];
+    source?: string | string[];
   }>;
 }) {
   const { category: categoryParam, id } = await params;
-  const { igdbId, title } = await searchParams;
+  const { igdbId, title, source } = await searchParams;
   const category = parseDashboardCategoryStrict(categoryParam);
 
   if (!category) {
@@ -47,6 +63,7 @@ export default async function DashboardCategoryDetailPage({
 
   const normalizedIgdbId = Array.isArray(igdbId) ? igdbId[0] : igdbId;
   const normalizedTitle = Array.isArray(title) ? title[0] : title;
+  const normalizedSource = normalizeSourceParam(source, category);
 
   return (
     <div className="mx-auto max-w-6xl">
@@ -75,7 +92,7 @@ export default async function DashboardCategoryDetailPage({
           mediaType={DASHBOARD_MEDIA_TYPE_BY_CATEGORY[category]}
           title={normalizedTitle ?? id}
           externalId={normalizedIgdbId}
-          source={normalizedIgdbId ? "IGDB" : undefined}
+          source={normalizedIgdbId ? normalizedSource : undefined}
         />
       </div>
 

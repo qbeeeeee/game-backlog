@@ -16,47 +16,6 @@ function MetricTile({ label, value }: { label: string; value: string }) {
   );
 }
 
-function MoviesPanel() {
-  const movies = [
-    { title: "Blade Runner 2049", mood: "Sci-Fi Noir", runtime: "164 min" },
-    { title: "Whiplash", mood: "Intense", runtime: "106 min" },
-    { title: "The Grand Budapest Hotel", mood: "Stylized", runtime: "100 min" },
-    { title: "Past Lives", mood: "Romance Drama", runtime: "106 min" },
-  ];
-
-  return (
-    <div className="space-y-6">
-      <section className="grid grid-cols-1 gap-4 sm:grid-cols-3">
-        <MetricTile label="Watchlist" value="24 titles" />
-        <MetricTile label="Weekend Picks" value="6 ready" />
-        <MetricTile label="Avg Runtime" value="122 min" />
-      </section>
-      <section className="grid gap-4 md:grid-cols-2">
-        {movies.map((movie) => (
-          <Card key={movie.title} className="border-gray-800/70 bg-gray-950/70">
-            <CardHeader>
-              <CardTitle className="text-lg text-white">
-                {movie.title}
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="flex items-center justify-between">
-              <Badge
-                variant="outline"
-                className="border-cyan-500/40 text-cyan-300"
-              >
-                {movie.mood}
-              </Badge>
-              <span className="text-xs uppercase tracking-[0.2em] text-gray-500">
-                {movie.runtime}
-              </span>
-            </CardContent>
-          </Card>
-        ))}
-      </section>
-    </div>
-  );
-}
-
 function SeriesPanel() {
   const series = [
     { name: "Severance", season: "S2", progress: 78 },
@@ -191,7 +150,7 @@ export function CategoryPanels({ category }: { category: DashboardCategory }) {
   }
 
   if (category === "movies") {
-    return <MoviesPanel />;
+    return <DashboardContent category={category} />;
   }
 
   if (category === "series") {
