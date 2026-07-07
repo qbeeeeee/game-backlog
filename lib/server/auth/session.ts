@@ -37,3 +37,15 @@ export async function getUserIdFromRequest(request: NextRequest) {
   const payload = await verifySessionToken(token);
   return payload?.sub ?? null;
 }
+
+export async function getUserIdFromSession() {
+  const cookieStore = await cookies();
+  const token = cookieStore.get(SESSION_COOKIE_NAME)?.value;
+
+  if (!token) {
+    return null;
+  }
+
+  const payload = await verifySessionToken(token);
+  return payload?.sub ?? null;
+}

@@ -1,4 +1,5 @@
 import { CategoryPanels } from "@/components/dashboard/CategoryPanels";
+import { DashboardCategoryTracker } from "@/components/dashboard/DashboardNavigationSync";
 import { Badge } from "@/components/ui/badge";
 import {
   DASHBOARD_CATEGORY_META,
@@ -44,6 +45,8 @@ export default async function DashboardCategoryPage({
 
   return (
     <>
+      <DashboardCategoryTracker category={category} />
+
       <div className="mb-8">
         <Badge
           variant="outline"
