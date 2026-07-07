@@ -16,7 +16,7 @@ import type { DashboardGame, DashboardGameStatus } from "@/lib/category-api";
 import { GameCard } from "@/components/dashboard/GameCard";
 import { SkeletonLoader } from "@/components/dashboard/SkeletonLoader";
 import { StatusFilterBar } from "@/components/dashboard/StatusFilterBar";
-import { Badge } from "@/components/ui/badge";
+
 import {
   Card,
   CardContent,

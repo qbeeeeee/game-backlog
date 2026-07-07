@@ -3,29 +3,29 @@
 import { useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { useAppPreferencesStore } from "@/stores/categories-ui-store";
-import type { DashboardCategory } from "@/lib/dashboard-categories";
+import type { ProfileCategory } from "@/lib/profile-categories";
 
-export function DashboardCategoryTracker({
+export function ProfileCategoryTracker({
   category,
 }: {
-  category: DashboardCategory;
+  category: ProfileCategory;
 }) {
-  const setLastDashboardCategory = useAppPreferencesStore(
-    (state) => state.setLastDashboardCategory,
+  const setLastProfileCategory = useAppPreferencesStore(
+    (state) => state.setLastProfileCategory,
   );
 
   useEffect(() => {
-    setLastDashboardCategory(category);
-  }, [category, setLastDashboardCategory]);
+    setLastProfileCategory(category);
+  }, [category, setLastProfileCategory]);
 
   return null;
 }
 
-export function DashboardLandingRedirect() {
+export function ProfileLandingRedirect() {
   const router = useRouter();
   const hasMounted = useRef(false);
-  const lastDashboardCategory = useAppPreferencesStore(
-    (state) => state.lastDashboardCategory,
+  const lastProfileCategory = useAppPreferencesStore(
+    (state) => state.lastProfileCategory,
   );
 
   const isHydrated = useAppPreferencesStore.persist.hasHydrated();
@@ -38,7 +38,7 @@ export function DashboardLandingRedirect() {
         }
 
         hasMounted.current = true;
-        router.replace(`/dashboard/${lastDashboardCategory ?? "games"}`);
+        router.replace(`/profile/${lastProfileCategory ?? "overview"}`);
       });
     }
 
@@ -47,8 +47,8 @@ export function DashboardLandingRedirect() {
     }
 
     hasMounted.current = true;
-    router.replace(`/dashboard/${lastDashboardCategory ?? "games"}`);
-  }, [isHydrated, lastDashboardCategory, router]);
+    router.replace(`/profile/${lastProfileCategory ?? "overview"}`);
+  }, [isHydrated, lastProfileCategory, router]);
 
   return null;
 }

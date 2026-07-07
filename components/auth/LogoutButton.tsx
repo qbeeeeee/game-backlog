@@ -103,7 +103,7 @@ export function LogoutButton({ className, label = "Exit" }: LogoutButtonProps) {
         ) : null}
         <Avatar
           onClick={() => setOpenModal((prev) => !prev)}
-          className="size-9 border border-purple-300/30"
+          className="size-9 border border-purple-300/30 hover:scale-105 transition-transform"
         >
           <AvatarImage
             src={profile.imageUrl || undefined}
@@ -118,7 +118,7 @@ export function LogoutButton({ className, label = "Exit" }: LogoutButtonProps) {
           variant="ghost"
           onClick={() => logoutMutation.mutate()}
           disabled={logoutMutation.isPending}
-          className={`px-3 text-xs uppercase tracking-widest text-gray-300 hover:text-white hover:bg-transparent ${className ?? ""}`}
+          className={`px-3 text-xs uppercase cursor-pointer hover:underline tracking-widest text-gray-300 hover:text-white hover:bg-transparent ${className ?? ""}`}
         >
           {logoutMutation.isPending ? "Logging out..." : label}
         </Button>

@@ -1,7 +1,7 @@
 import type { ReactNode } from "react";
 import { LoggedInShell } from "@/components/layouts/LoggedInShell";
-import { ProfileMobileMenu } from "@/components/profile/ProfileMobileMenu";
-import { ProfileSidebar } from "@/components/profile/ProfileSidebar";
+import { ProfileMobileMenu } from "@/components/profile/sidebar-menu/ProfileMobileMenu";
+import { ProfileSidebar } from "@/components/profile/sidebar-menu/ProfileSidebar";
 
 export default function ProfileSectionLayout({
   children,

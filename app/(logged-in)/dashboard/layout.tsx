@@ -1,6 +1,6 @@
 import type { ReactNode } from "react";
-import { CategorySidebar } from "@/components/dashboard/CategorySidebar";
-import { MobileCategoryMenu } from "@/components/dashboard/MobileCategoryMenu";
+import { DashboardSidebar } from "@/components/dashboard/sidebar-menu/DashboardSidebar";
+import { DashboardMobileMenu } from "@/components/dashboard/sidebar-menu/DashboardMobileMenu";
 import { LoggedInShell } from "@/components/layouts/LoggedInShell";
 
 export default function DashboardSectionLayout({
@@ -10,8 +10,8 @@ export default function DashboardSectionLayout({
 }) {
   return (
     <LoggedInShell
-      desktopSidebar={<CategorySidebar />}
-      mobileMenu={<MobileCategoryMenu />}
+      desktopSidebar={<DashboardSidebar />}
+      mobileMenu={<DashboardMobileMenu />}
     >
       {children}
     </LoggedInShell>

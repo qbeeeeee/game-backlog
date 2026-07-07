@@ -13,7 +13,7 @@ import {
 } from "@/lib/dashboard-categories";
 import { cn } from "@/lib/utils";
 
-export function MobileCategoryMenu() {
+export function DashboardMobileMenu() {
   const [isOpen, setIsOpen] = useState(false);
   const [isMounted, setIsMounted] = useState(false);
   const pathname = usePathname();

@@ -12,7 +12,7 @@ import {
 } from "@/lib/dashboard-categories";
 import { cn } from "@/lib/utils";
 
-export function CategorySidebar() {
+export function DashboardSidebar() {
   const pathname = usePathname();
   const searchParams = useSearchParams();
 
@@ -45,7 +45,7 @@ export function CategorySidebar() {
           </div>
 
           <p className="mb-3 text-[11px] font-semibold uppercase tracking-[0.24em] text-cyan-300">
-            Categories
+            Dashboard
           </p>
 
           <div className="space-y-1">
@@ -90,23 +90,9 @@ export function CategorySidebar() {
           </div>
         </div>
 
-        <div className="flex items-center gap-3">
-          <ul className="flex items-center gap-4 list-none">
-            {/* <li>
-              <Link
-                href="/dashboard"
-                className={cn(
-                  buttonVariants({ variant: "ghost", size: "sm" }),
-                  "text-xs tracking-widest uppercase hover:bg-cyan-300 text-cyan-300 hover:text-black",
-                )}
-              >
-                Dashboard
-              </Link>
-            </li> */}
-
-            <LogoutButton />
-          </ul>
-        </div>
+        <ul className="flex items-center gap-2 list-none">
+          <LogoutButton />
+        </ul>
       </nav>
     </aside>
   );
