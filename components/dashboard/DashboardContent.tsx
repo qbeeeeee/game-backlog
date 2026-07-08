@@ -12,7 +12,7 @@
 import { useSearchParams } from "next/navigation";
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { fetchCategoryItems, gameKeys } from "@/lib/category-api";
-import type { DashboardGame, DashboardGameStatus } from "@/lib/category-api";
+import type { DashboardGame } from "@/lib/category-api";
 import { GameCard } from "@/components/dashboard/GameCard";
 import { SkeletonLoader } from "@/components/dashboard/SkeletonLoader";
 import { StatusFilterBar } from "@/components/dashboard/StatusFilterBar";
@@ -29,11 +29,11 @@ import {
   DASHBOARD_CATEGORY_META,
   type DashboardCategory,
 } from "@/lib/dashboard-categories";
-
-// ---------------------------------------------------------------------------
-// Filter type — "All" is a UI-only value for dashboard filtering
-// ---------------------------------------------------------------------------
-type StatusFilter = DashboardGameStatus | "All";
+import {
+  getStatusMetricLabel,
+  parseStatusFilterParam,
+  type DashboardStatusFilter,
+} from "@/lib/dashboard-category-ui";
 
 // ---------------------------------------------------------------------------
 // Stat metric card
@@ -96,12 +96,7 @@ export function DashboardContent({
     ? categoryLabel.slice(0, -1)
     : categoryLabel;
 
-  const activeFilter: StatusFilter =
-    statusParam === "Backlog" ||
-    statusParam === "Playing" ||
-    statusParam === "Completed"
-      ? statusParam
-      : "All";
+  const activeFilter: DashboardStatusFilter = parseStatusFilterParam(statusParam);
 
   const {
     data: games,
@@ -165,17 +160,17 @@ export function DashboardContent({
             accent="border-gray-700/60"
           />
           <StatCard
-            label="In Backlog"
+            label={getStatusMetricLabel(category, "Backlog")}
             value={backlogCount}
             accent="border-gray-600/60"
           />
           <StatCard
-            label="Playing"
+            label={getStatusMetricLabel(category, "Playing")}
             value={playingCount}
             accent="border-cyan-800/60"
           />
           <StatCard
-            label="Completed"
+            label={getStatusMetricLabel(category, "Completed")}
             value={completedCount}
             accent="border-emerald-800/60"
           />
@@ -185,7 +180,11 @@ export function DashboardContent({
       {/* ------------------------------------------------------------------ */}
       {/* Filter Controls                                                      */}
       {/* ------------------------------------------------------------------ */}
-      <StatusFilterBar currentFilter={activeFilter} currentQuery={queryParam} />
+      <StatusFilterBar
+        category={category}
+        currentFilter={activeFilter}
+        currentQuery={queryParam}
+      />
 
       <section className="grid gap-4 xl:grid-cols-[1.6fr_1fr]">
         <Card className="border-gray-800/70 bg-gray-950/60">

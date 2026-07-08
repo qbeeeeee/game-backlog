@@ -2,6 +2,7 @@ import Link from "next/link";
 import Image from "next/image";
 import type { DashboardGame } from "@/lib/category-api";
 import type { DashboardCategory } from "@/lib/dashboard-categories";
+import { getStatusLabel } from "@/lib/dashboard-category-ui";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
@@ -28,10 +29,6 @@ const STATUS_ICONS: Record<DashboardGame["status"], string> = {
   Completed: "✔",
 };
 
-function formatReleaseDate(year: number) {
-  return `Jan 1, ${year}`;
-}
-
 function shortenText(text: string, maxLength: number) {
   if (text.length <= maxLength) {
     return text;
@@ -49,7 +46,7 @@ interface GameCardProps {
 // GameCard — displays a single game entry in the backlog grid.
 // ---------------------------------------------------------------------------
 export function GameCard({ game, category }: GameCardProps) {
-  const statusLabel = game.status || "Unassigned";
+  const statusLabel = getStatusLabel(category, game.status);
   const canOpenDetail = Boolean(game.igdbId);
   const query = new URLSearchParams();
   query.set("title", game.title);
@@ -128,7 +125,7 @@ export function GameCard({ game, category }: GameCardProps) {
           </dl>
 
           <div
-            className="mt-auto flex gap-2 pt-1 overflow-x-auto scrollbar-arcade
+            className="mt-auto flex items-end gap-2 py-1.5 overflow-x-auto scrollbar-arcade
            [&::-webkit-scrollbar]:h-1.5 h-10"
           >
             <Badge

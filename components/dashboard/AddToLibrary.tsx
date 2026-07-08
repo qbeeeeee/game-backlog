@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   DASHBOARD_TO_TRACKED_STATUS,
@@ -9,7 +9,11 @@ import {
   gameKeys,
   trackedToDashboardStatus,
 } from "@/lib/category-api";
-import { DashboardMediaType } from "@/lib/dashboard-categories";
+import { getCategoryStatusCopy } from "@/lib/dashboard-category-ui";
+import {
+  DashboardCategory,
+  DashboardMediaType,
+} from "@/lib/dashboard-categories";
 
 import {
   Gamepad2,
@@ -29,6 +33,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 
 interface AddToLibraryProps {
+  category: DashboardCategory;
   mediaType: DashboardMediaType;
   title: string;
   externalId?: string;
@@ -59,6 +64,7 @@ interface ApiFailure {
 type ApiResponse<T> = ApiSuccess<T> | ApiFailure;
 
 export default function AddToLibrary({
+  category,
   mediaType,
   title,
   externalId,
@@ -66,11 +72,16 @@ export default function AddToLibrary({
   initialStatus = "",
 }: AddToLibraryProps) {
   const queryClient = useQueryClient();
-  const [libraryStatus, setLibraryStatus] = useState<DashboardGameStatus | "">(
-    initialStatus,
-  );
-  const [trackedItemId, setTrackedItemId] = useState<string | null>(null);
-  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [optimisticStatus, setOptimisticStatus] = useState<
+    DashboardGameStatus | "" | null
+  >(null);
+  const [optimisticTrackedItemId, setOptimisticTrackedItemId] = useState<
+    string | null
+  >(null);
+  const [optimisticErrorMessage, setOptimisticErrorMessage] = useState<
+    string | null
+  >(null);
+  const statusCopy = getCategoryStatusCopy(category);
 
   const trackerQueryKey = [
     "tracker-item",
@@ -81,13 +92,14 @@ export default function AddToLibrary({
   ] as const;
 
   const options = [
-    { value: "Backlog", label: "Backlog", icon: Bookmark },
-    { value: "Playing", label: "Playing", icon: Gamepad2 },
-    { value: "Completed", label: "Completed", icon: Trophy },
+    { value: "Backlog", label: statusCopy.labels.Backlog, icon: Bookmark },
+    { value: "Playing", label: statusCopy.labels.Playing, icon: Gamepad2 },
+    {
+      value: "Completed",
+      label: statusCopy.labels.Completed,
+      icon: Trophy,
+    },
   ] as const;
-
-  const selectedOption = options.find((opt) => opt.value === libraryStatus);
-  const ActiveIcon = selectedOption?.icon;
 
   const trackedItemQuery = useQuery<TrackedItemRecord | null, Error>({
     queryKey: trackerQueryKey,
@@ -142,6 +154,17 @@ export default function AddToLibrary({
     enabled: Boolean(title),
     retry: 1,
   });
+
+  const queryStatus = trackedItemQuery.data
+    ? trackedToDashboardStatus(trackedItemQuery.data.status)
+    : initialStatus;
+  const libraryStatus = optimisticStatus ?? queryStatus;
+  const trackedItemId =
+    optimisticTrackedItemId ?? trackedItemQuery.data?.id ?? null;
+  const selectedOption = options.find((opt) => opt.value === libraryStatus);
+  const ActiveIcon = selectedOption?.icon;
+  const errorMessage =
+    optimisticErrorMessage ?? trackedItemQuery.error?.message ?? null;
 
   const createTrackedItemMutation = useMutation<
     TrackedItemRecord,
@@ -244,37 +267,14 @@ export default function AddToLibrary({
     updateTrackedItemMutation.isPending ||
     deleteTrackedItemMutation.isPending;
 
-  useEffect(() => {
-    if (!trackedItemQuery.isSuccess) {
-      return;
-    }
-
-    if (trackedItemQuery.data) {
-      setTrackedItemId(trackedItemQuery.data.id);
-      setLibraryStatus(trackedToDashboardStatus(trackedItemQuery.data.status));
-      return;
-    }
-
-    setTrackedItemId(null);
-    setLibraryStatus(initialStatus);
-  }, [trackedItemQuery.data, trackedItemQuery.isSuccess, initialStatus]);
-
-  useEffect(() => {
-    if (!trackedItemQuery.error) {
-      return;
-    }
-
-    setErrorMessage(trackedItemQuery.error.message);
-  }, [trackedItemQuery.error]);
-
   const handleSelect = async (value: DashboardGameStatus | "") => {
     if (isSaving || isLoading) {
       return;
     }
 
     const previousStatus = libraryStatus;
-    setLibraryStatus(value);
-    setErrorMessage(null);
+    setOptimisticStatus(value);
+    setOptimisticErrorMessage(null);
 
     try {
       if (!value) {
@@ -284,7 +284,7 @@ export default function AddToLibrary({
           });
         }
 
-        setTrackedItemId(null);
+        setOptimisticTrackedItemId(null);
         await queryClient.invalidateQueries({ queryKey: trackerQueryKey });
         await queryClient.invalidateQueries({ queryKey: gameKeys.all });
         return;
@@ -310,12 +310,12 @@ export default function AddToLibrary({
       }
 
       const createdItem = await createTrackedItemMutation.mutateAsync(body);
-      setTrackedItemId(createdItem.id);
+      setOptimisticTrackedItemId(createdItem.id);
       await queryClient.invalidateQueries({ queryKey: trackerQueryKey });
       await queryClient.invalidateQueries({ queryKey: gameKeys.all });
     } catch (error) {
-      setLibraryStatus(previousStatus);
-      setErrorMessage(
+      setOptimisticStatus(previousStatus);
+      setOptimisticErrorMessage(
         error instanceof Error
           ? error.message
           : "Could not save library change.",

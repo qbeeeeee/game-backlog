@@ -55,6 +55,8 @@ export interface DashboardGame {
 export interface DashboardGameDetail extends DashboardGame {
   storyline: string | null;
   companies: string[];
+  cast: string[];
+  runtimeMinutes: number | null;
   coverUrl: string | null;
 }
 

@@ -2,7 +2,12 @@
 
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useState, useTransition } from "react";
-import type { DashboardGameStatus } from "@/lib/category-api";
+import type { DashboardCategory } from "@/lib/dashboard-categories";
+import {
+  getCategoryStatusCopy,
+  getStatusFilterOptions,
+  type DashboardStatusFilter,
+} from "@/lib/dashboard-category-ui";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -10,21 +15,14 @@ import { Input } from "@/components/ui/input";
 import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
-type StatusFilter = DashboardGameStatus | "All";
-
-const FILTER_OPTIONS: StatusFilter[] = [
-  "All",
-  "Backlog",
-  "Playing",
-  "Completed",
-];
-
 interface StatusFilterBarProps {
-  currentFilter: StatusFilter;
+  category: DashboardCategory;
+  currentFilter: DashboardStatusFilter;
   currentQuery: string;
 }
 
 export function StatusFilterBar({
+  category,
   currentFilter,
   currentQuery,
 }: StatusFilterBarProps) {
@@ -33,8 +31,10 @@ export function StatusFilterBar({
   const searchParams = useSearchParams();
   const [searchInput, setSearchInput] = useState(currentQuery);
   const [isPending, startTransition] = useTransition();
+  const statusCopy = getCategoryStatusCopy(category);
+  const filterOptions = getStatusFilterOptions(category);
 
-  function pushFilters(nextFilter: StatusFilter, nextQuery: string) {
+  function pushFilters(nextFilter: DashboardStatusFilter, nextQuery: string) {
     const params = new URLSearchParams(searchParams.toString());
 
     if (nextFilter === "All") {
@@ -61,7 +61,7 @@ export function StatusFilterBar({
   }
 
   return (
-    <section aria-label="Filter games by status and search">
+    <section aria-label="Filter dashboard items by status and search">
       <Card className="border-gray-800/70 bg-gray-950/70">
         <CardContent className="flex flex-col gap-4">
           <div
@@ -69,13 +69,13 @@ export function StatusFilterBar({
             role="group"
             aria-label="Status filter"
           >
-            {FILTER_OPTIONS.map((filter) => {
-              const isActive = currentFilter === filter;
+            {filterOptions.map((option) => {
+              const isActive = currentFilter === option.value;
 
               return (
                 <Button
-                  key={filter}
-                  onClick={() => pushFilters(filter, searchInput)}
+                  key={option.value}
+                  onClick={() => pushFilters(option.value, searchInput)}
                   aria-pressed={isActive}
                   variant={isActive ? "default" : "outline"}
                   size="sm"
@@ -85,7 +85,7 @@ export function StatusFilterBar({
                       : "border-gray-700 bg-transparent text-gray-300 hover:border-gray-500"
                   }`}
                 >
-                  {filter}
+                  {option.label}
                 </Button>
               );
             })}
@@ -101,7 +101,7 @@ export function StatusFilterBar({
             <Input
               value={searchInput}
               onChange={(event) => setSearchInput(event.target.value)}
-              placeholder="Search by title, genre, or type"
+              placeholder={statusCopy.searchPlaceholder}
               className="min-w-0 flex-1 border-gray-800 bg-black text-white placeholder:text-gray-600"
             />
             <Button

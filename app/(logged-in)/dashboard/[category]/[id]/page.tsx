@@ -89,6 +89,7 @@ export default async function DashboardCategoryDetailPage({
         </div>
 
         <AddToLibrary
+          category={category}
           mediaType={DASHBOARD_MEDIA_TYPE_BY_CATEGORY[category]}
           title={normalizedTitle ?? id}
           externalId={normalizedIgdbId}

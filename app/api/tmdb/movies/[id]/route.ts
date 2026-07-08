@@ -17,10 +17,17 @@ interface TmdbMovieDetailResponse {
   title: string;
   overview: string;
   release_date: string | null;
+  runtime: number | null;
   vote_average: number;
   poster_path: string | null;
   genres: TmdbMovieGenre[];
   production_companies: TmdbProductionCompany[];
+  credits?: {
+    cast: Array<{
+      id: number;
+      name: string;
+    }>;
+  };
 }
 
 function buildTmdbImageUrl(path: string | null, size: "w500" | "original") {
@@ -56,6 +63,7 @@ export async function GET(
     );
     endpointUrl.searchParams.set("api_key", apiKey);
     endpointUrl.searchParams.set("language", "en-US");
+    endpointUrl.searchParams.set("append_to_response", "credits");
 
     const response = await fetch(endpointUrl, {
       method: "GET",
@@ -82,9 +90,11 @@ export async function GET(
       title: payload.title,
       overview: payload.overview,
       releaseDate: payload.release_date,
+      runtimeMinutes: payload.runtime,
       voteAverage: Number(payload.vote_average.toFixed(1)),
       coverUrl: buildTmdbImageUrl(payload.poster_path, "w500"),
       genres: payload.genres.map((genre) => genre.name),
+      cast: (payload.credits?.cast ?? []).slice(0, 8).map((actor) => actor.name),
       productionCompanies: payload.production_companies.map(
         (company) => company.name,
       ),

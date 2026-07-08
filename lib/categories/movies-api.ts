@@ -17,9 +17,11 @@ interface TmdbMovie {
   title: string;
   overview: string;
   releaseDate: string | null;
+  runtimeMinutes?: number | null;
   voteAverage: number;
   coverUrl?: string | null;
   genres: string[];
+  cast?: string[];
   productionCompanies?: string[];
 }
 
@@ -54,6 +56,8 @@ function toDashboardMovieDetail(movie: TmdbMovie): DashboardGameDetail {
     ...toDashboardMovie(movie),
     storyline: null,
     companies: movie.productionCompanies ?? [],
+    cast: movie.cast ?? [],
+    runtimeMinutes: movie.runtimeMinutes ?? null,
     coverUrl: movie.coverUrl ?? null,
   };
 }

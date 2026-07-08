@@ -5,6 +5,11 @@ import { useSearchParams } from "next/navigation";
 import { useQuery } from "@tanstack/react-query";
 import { fetchDashboardCategoryDetail, gameKeys } from "@/lib/category-api";
 import type { DashboardCategory } from "@/lib/dashboard-categories";
+import {
+  getDetailCopy,
+  getDetailExtraTileValue,
+  getDetailRosterValues,
+} from "@/lib/dashboard-category-ui";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -94,6 +99,13 @@ export function GameDetailContent({
     );
   }
 
+  const detailCopy = getDetailCopy(category);
+  const rosterValues = getDetailRosterValues(category, game);
+  const extraTileValue = getDetailExtraTileValue(category, game);
+  const firstTile = detailCopy.extraTileLabel
+    ? { label: detailCopy.extraTileLabel, value: extraTileValue ?? "N/A" }
+    : { label: "Type", value: game.type ?? "General" };
+
   return (
     <Card className="rounded-3xl border-gray-800 bg-gray-950/80 shadow-[0_0_40px_rgba(34,211,238,0.08)]">
       <CardContent>
@@ -109,18 +121,20 @@ export function GameDetailContent({
               {game.title}
             </h1>
             <p className="mt-4 text-sm uppercase tracking-[0.24em] text-gray-600">
-              Description
+              {detailCopy.summaryLabel}
             </p>
             <p className="mt-2 text-sm leading-7 text-gray-300 overflow-y-auto max-h-40 scrollbar-arcade pr-4">
               {game.summary}
             </p>
-            <p className="mt-4 text-sm uppercase tracking-[0.24em] text-gray-600">
-              Story Line
-            </p>
-            {game.storyline ? (
-              <p className="mt-2 text-sm leading-7 text-gray-300 overflow-y-auto max-h-40 scrollbar-arcade pr-4">
-                {game.storyline}
-              </p>
+            {detailCopy.secondaryLabel && game.storyline ? (
+              <>
+                <p className="mt-4 text-sm uppercase tracking-[0.24em] text-gray-600">
+                  {detailCopy.secondaryLabel}
+                </p>
+                <p className="mt-2 text-sm leading-7 text-gray-300 overflow-y-auto max-h-40 scrollbar-arcade pr-4">
+                  {game.storyline}
+                </p>
+              </>
             ) : null}
           </div>
 
@@ -140,7 +154,7 @@ export function GameDetailContent({
         </div>
 
         <div className="mt-8 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-          <InfoTile label="Type" value={game.type ?? "General"} />
+          <InfoTile label={firstTile.label} value={firstTile.value} />
           <InfoTile label="Genre" value={game.genre} />
           <InfoTile label="Release" value={game.releaseYear} />
           <InfoTile label="Rating" value={`${game.rating}/10`} />
@@ -149,14 +163,14 @@ export function GameDetailContent({
         <Card className="mt-8 border-gray-800 bg-black/30">
           <CardHeader>
             <CardTitle className="text-[10px] uppercase tracking-[0.24em] text-gray-600">
-              Companies
+              {detailCopy.rosterLabel}
             </CardTitle>
           </CardHeader>
           <CardContent>
             <CardDescription className="text-sm leading-7 text-gray-300">
-              {game.companies.length > 0
-                ? game.companies.join(", ")
-                : "No company info available for this game."}
+              {rosterValues.length > 0
+                ? rosterValues.join(", ")
+                : detailCopy.rosterEmptyMessage}
             </CardDescription>
           </CardContent>
         </Card>

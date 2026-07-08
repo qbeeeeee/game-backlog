@@ -67,6 +67,8 @@ function toDashboardGameDetail(game: TwitchIgdbGame): DashboardGameDetail {
     ...base,
     storyline: game.storyline ?? null,
     companies: game.companies ?? [],
+    cast: [],
+    runtimeMinutes: null,
     coverUrl: game.coverUrl ?? null,
   };
 }
