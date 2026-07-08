@@ -38,6 +38,7 @@ function toDashboardMovie(movie: TmdbMovie): DashboardGame {
     id: String(movie.id),
     igdbId: String(movie.id),
     source: "TMDB",
+    coverUrl: movie.coverUrl ?? null,
     title: movie.title,
     genre: movie.genres[0] ?? "Unknown",
     type: movie.genres[1] ?? movie.genres[0] ?? "General",

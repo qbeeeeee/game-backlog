@@ -243,16 +243,14 @@ export function DashboardContent({
               </p>
             </div>
           ) : !isResultsRefreshing ? (
-            <ul
-              className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 list-none p-0"
+            <div
+              className="flex flex-wrap justify-around gap-4 p-0"
               aria-label="Games list"
             >
               {safeGames.map((game) => (
-                <li key={game.id}>
-                  <GameCard game={game} category={category} />
-                </li>
+                <GameCard key={game.id} game={game} category={category} />
               ))}
-            </ul>
+            </div>
           ) : (
             <div className="h-100" />
           )}

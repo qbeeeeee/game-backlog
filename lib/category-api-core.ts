@@ -42,6 +42,7 @@ export interface DashboardGame {
   id: string;
   igdbId?: string | null;
   source?: string | null;
+  coverUrl?: string | null;
   title: string;
   genre: string;
   type?: string;
@@ -74,7 +75,9 @@ export const gameKeys = {
     ["dashboard-media", category, "detail", id, externalId ?? "none"] as const,
 };
 
-const CATEGORY_TO_MEDIA_TYPE: Partial<Record<DashboardCategory, "GAME" | "MOVIE">> = {
+const CATEGORY_TO_MEDIA_TYPE: Partial<
+  Record<DashboardCategory, "GAME" | "MOVIE">
+> = {
   games: "GAME",
   movies: "MOVIE",
 };
@@ -130,6 +133,7 @@ export function toFallbackDashboardGame(
     id: item.externalId ?? item.id,
     igdbId: item.externalId ?? null,
     source: item.source ?? undefined,
+    coverUrl: null,
     title: item.title,
     genre: "Unknown",
     type: "General",

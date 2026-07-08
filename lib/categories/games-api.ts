@@ -1,4 +1,7 @@
-import { normalizeForCompare, type TrackedItemSummary } from "@/lib/tracker-client";
+import {
+  normalizeForCompare,
+  type TrackedItemSummary,
+} from "@/lib/tracker-client";
 import {
   fetchTrackedItemsForCategory,
   mergeTrackedStatusesForCategory,
@@ -44,6 +47,7 @@ function toDashboardGame(game: TwitchIgdbGame): DashboardGame {
     id: game.id,
     igdbId: game.twitch?.igdbId ?? null,
     source: "IGDB",
+    coverUrl: game.coverUrl ?? null,
     title: game.name,
     genre: game.genres[0] ?? "Unknown",
     type: game.genres[1] ?? game.genres[0] ?? "General",
