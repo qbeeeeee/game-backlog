@@ -48,7 +48,7 @@ function StatCard({
   accent: string;
 }) {
   return (
-    <Card className={`bg-gray-900/90 ${accent}`}>
+    <Card className={`bg-gray-900/90 border ${accent}`}>
       <CardContent className="flex flex-col gap-1">
         <p className="text-[11px] font-mono uppercase tracking-widest text-gray-500">
           {label}
@@ -96,7 +96,8 @@ export function DashboardContent({
     ? categoryLabel.slice(0, -1)
     : categoryLabel;
 
-  const activeFilter: DashboardStatusFilter = parseStatusFilterParam(statusParam);
+  const activeFilter: DashboardStatusFilter =
+    parseStatusFilterParam(statusParam);
 
   const {
     data: games,
@@ -157,22 +158,22 @@ export function DashboardContent({
           <StatCard
             label={`Total ${categoryLabel}`}
             value={totalGames}
-            accent="border-gray-700/60"
+            accent="border-cyan-300/30"
           />
           <StatCard
             label={getStatusMetricLabel(category, "Backlog")}
             value={backlogCount}
-            accent="border-gray-600/60"
+            accent="border-cyan-300/30"
           />
           <StatCard
             label={getStatusMetricLabel(category, "Playing")}
             value={playingCount}
-            accent="border-cyan-800/60"
+            accent="border-cyan-300/30"
           />
           <StatCard
             label={getStatusMetricLabel(category, "Completed")}
             value={completedCount}
-            accent="border-emerald-800/60"
+            accent="border-cyan-300/30"
           />
         </div>
       </section>
