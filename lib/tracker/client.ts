@@ -1,4 +1,4 @@
-import type { DashboardMediaType } from "@/lib/dashboard-categories";
+import type { DashboardMediaType } from "@/lib/dashboard/categories";
 
 export type TrackedItemStatus =
   | "BACKLOG"

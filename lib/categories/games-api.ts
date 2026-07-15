@@ -1,7 +1,7 @@
 import {
   normalizeForCompare,
   type TrackedItemSummary,
-} from "@/lib/tracker-client";
+} from "@/lib/tracker/client";
 import {
   fetchTrackedItemsForCategory,
   mergeTrackedStatusesForCategory,

@@ -9,7 +9,7 @@ import {
   DASHBOARD_CATEGORY_META,
   parseDashboardCategory,
   parseDashboardCategoryStrict,
-} from "@/lib/dashboard-categories";
+} from "@/lib/dashboard/categories";
 import { cn } from "@/lib/utils";
 
 export function DashboardSidebar() {

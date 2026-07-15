@@ -4,7 +4,7 @@ import { CategoryPageLayout } from "@/components/layouts/CategoryPageLayout";
 import {
   PROFILE_CATEGORY_META,
   parseProfileCategoryStrict,
-} from "@/lib/profile-categories";
+} from "@/lib/profile/categories";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 

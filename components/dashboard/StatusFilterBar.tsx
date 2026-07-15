@@ -2,12 +2,12 @@
 
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useState, useTransition } from "react";
-import type { DashboardCategory } from "@/lib/dashboard-categories";
+import type { DashboardCategory } from "@/lib/dashboard/categories";
 import {
   getCategoryStatusCopy,
   getStatusFilterOptions,
   type DashboardStatusFilter,
-} from "@/lib/dashboard-category-ui";
+} from "@/lib/dashboard/category-ui";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";

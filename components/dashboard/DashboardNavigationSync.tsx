@@ -3,7 +3,7 @@
 import { useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { useAppPreferencesStore } from "@/stores/categories-ui-store";
-import type { DashboardCategory } from "@/lib/dashboard-categories";
+import type { DashboardCategory } from "@/lib/dashboard/categories";
 
 export function DashboardCategoryTracker({
   category,

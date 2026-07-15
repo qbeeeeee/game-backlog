@@ -1,5 +1,5 @@
 import { ProfileCategoryWrapper } from "@/components/profile/ProfilleCategoryWrapper";
-import { PROFILE_CATEGORY_META } from "@/lib/profile-categories";
+import { PROFILE_CATEGORY_META } from "@/lib/profile/categories";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {

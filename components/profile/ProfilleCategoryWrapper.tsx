@@ -2,7 +2,7 @@ import type { ReactNode } from "react";
 
 import { ProfileCategoryTracker } from "@/components/profile/ProfileNavigationSync";
 import { CategoryPageLayout } from "@/components/layouts/CategoryPageLayout";
-import { PROFILE_CATEGORY_META } from "@/lib/profile-categories";
+import { PROFILE_CATEGORY_META } from "@/lib/profile/categories";
 
 export function ProfileCategoryWrapper({
   category,

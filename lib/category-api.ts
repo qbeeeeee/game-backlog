@@ -1,13 +1,22 @@
-import type { DashboardCategory } from "@/lib/dashboard-categories";
-import type { DashboardGameDetail, GamesFilters } from "@/lib/category-api-core";
-import { fetchDashboardGameDetail, fetchGames } from "@/lib/categories/games-api";
+import type { DashboardCategory } from "@/lib/dashboard/categories";
+import type {
+  DashboardGameDetail,
+  GamesFilters,
+} from "@/lib/category-api-core";
+import {
+  fetchDashboardGameDetail,
+  fetchGames,
+} from "@/lib/categories/games-api";
 import {
   fetchDashboardMovieDetail,
   fetchMovies,
 } from "@/lib/categories/movies-api";
 
 export * from "@/lib/category-api-core";
-export { fetchGames, fetchDashboardGameDetail } from "@/lib/categories/games-api";
+export {
+  fetchGames,
+  fetchDashboardGameDetail,
+} from "@/lib/categories/games-api";
 export {
   fetchMovies,
   fetchDashboardMovieDetail,

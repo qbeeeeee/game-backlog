@@ -7,12 +7,12 @@ import { Loader2 } from "lucide-react";
 import {
   DASHBOARD_MEDIA_TYPE_BY_CATEGORY,
   type DashboardCategory,
-} from "@/lib/dashboard-categories";
+} from "@/lib/dashboard/categories";
 import {
   getStatusLabel,
   getStatusFilterOptions,
   type DashboardStatusFilter,
-} from "@/lib/dashboard-category-ui";
+} from "@/lib/dashboard/category-ui";
 import { Button } from "../ui/button";
 import {
   DashboardAssignableStatus,

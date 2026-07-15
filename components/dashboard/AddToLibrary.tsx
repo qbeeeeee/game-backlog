@@ -9,11 +9,11 @@ import {
   gameKeys,
   trackedToDashboardStatus,
 } from "@/lib/category-api";
-import { getCategoryStatusCopy } from "@/lib/dashboard-category-ui";
+import { getCategoryStatusCopy } from "@/lib/dashboard/category-ui";
 import {
   DashboardCategory,
   DashboardMediaType,
-} from "@/lib/dashboard-categories";
+} from "@/lib/dashboard/categories";
 
 import {
   Gamepad2,

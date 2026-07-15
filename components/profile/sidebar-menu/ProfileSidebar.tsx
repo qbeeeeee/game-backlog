@@ -10,7 +10,7 @@ import {
   PROFILE_CATEGORY_META,
   parseProfileCategory,
   parseProfileCategoryStrict,
-} from "@/lib/profile-categories";
+} from "@/lib/profile/categories";
 import { usePathname, useSearchParams } from "next/navigation";
 
 export function ProfileSidebar() {

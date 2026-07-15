@@ -4,7 +4,7 @@ import { CategoryPageLayout } from "@/components/layouts/CategoryPageLayout";
 import {
   DASHBOARD_CATEGORY_META,
   parseDashboardCategoryStrict,
-} from "@/lib/dashboard-categories";
+} from "@/lib/dashboard/categories";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 

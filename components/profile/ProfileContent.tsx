@@ -1,7 +1,7 @@
 import {
   PROFILE_CATEGORY_META,
   type ProfileCategory,
-} from "@/lib/profile-categories";
+} from "@/lib/profile/categories";
 
 export function ProfileContent({ category }: { category: ProfileCategory }) {
   return (

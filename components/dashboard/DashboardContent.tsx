@@ -28,12 +28,12 @@ import { Skeleton } from "@/components/ui/skeleton";
 import {
   DASHBOARD_CATEGORY_META,
   type DashboardCategory,
-} from "@/lib/dashboard-categories";
+} from "@/lib/dashboard/categories";
 import {
   getStatusMetricLabel,
   parseStatusFilterParam,
   type DashboardStatusFilter,
-} from "@/lib/dashboard-category-ui";
+} from "@/lib/dashboard/category-ui";
 
 // ---------------------------------------------------------------------------
 // Stat metric card

@@ -4,12 +4,12 @@ import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { useQuery } from "@tanstack/react-query";
 import { fetchDashboardCategoryDetail, gameKeys } from "@/lib/category-api";
-import type { DashboardCategory } from "@/lib/dashboard-categories";
+import type { DashboardCategory } from "@/lib/dashboard/categories";
 import {
   getDetailCopy,
   getDetailExtraTileValue,
   getDetailRosterValues,
-} from "@/lib/dashboard-category-ui";
+} from "@/lib/dashboard/category-ui";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {

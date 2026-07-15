@@ -1,11 +1,11 @@
-import type { DashboardCategory } from "@/lib/dashboard-categories";
+import type { DashboardCategory } from "@/lib/dashboard/categories";
 import {
   fetchTrackedItems,
   mergeTrackedStatusesByExternalIdOrTitle,
   toTrackedStatusFilter,
   type TrackedItemStatus,
   type TrackedItemSummary,
-} from "@/lib/tracker-client";
+} from "@/lib/tracker/client";
 
 export type DashboardGameStatus = "" | "Backlog" | "Playing" | "Completed";
 export type DashboardTrackedItemStatus = TrackedItemStatus;

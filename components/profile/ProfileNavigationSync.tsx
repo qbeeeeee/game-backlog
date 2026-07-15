@@ -3,7 +3,7 @@
 import { useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { useAppPreferencesStore } from "@/stores/categories-ui-store";
-import type { ProfileCategory } from "@/lib/profile-categories";
+import type { ProfileCategory } from "@/lib/profile/categories";
 
 export function ProfileCategoryTracker({
   category,

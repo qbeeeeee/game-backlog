@@ -8,7 +8,7 @@ import {
   DASHBOARD_MEDIA_TYPE_BY_CATEGORY,
   type DashboardCategory,
   parseDashboardCategoryStrict,
-} from "@/lib/dashboard-categories";
+} from "@/lib/dashboard/categories";
 import { notFound } from "next/navigation";
 import AddToLibrary from "@/components/dashboard/AddToLibrary";
 import { inferSourceFromCategory } from "@/lib/category-api";

@@ -1,7 +1,7 @@
 import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
-import type { DashboardCategory } from "@/lib/dashboard-categories";
-import type { ProfileCategory } from "@/lib/profile-categories";
+import type { DashboardCategory } from "@/lib/dashboard/categories";
+import type { ProfileCategory } from "@/lib/profile/categories";
 
 interface AppPreferencesState {
   lastDashboardCategory: DashboardCategory | null;

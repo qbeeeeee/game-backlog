@@ -1,8 +1,8 @@
 import Link from "next/link";
 import Image from "next/image";
 import type { DashboardGame } from "@/lib/category-api";
-import type { DashboardCategory } from "@/lib/dashboard-categories";
-import { getStatusLabel } from "@/lib/dashboard-category-ui";
+import type { DashboardCategory } from "@/lib/dashboard/categories";
+import { getStatusLabel } from "@/lib/dashboard/category-ui";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";

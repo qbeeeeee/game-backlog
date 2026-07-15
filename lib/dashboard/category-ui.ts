@@ -3,7 +3,7 @@ import type {
   DashboardGameDetail,
   DashboardGameStatus,
 } from "@/lib/category-api";
-import type { DashboardCategory } from "@/lib/dashboard-categories";
+import type { DashboardCategory } from "@/lib/dashboard/categories";
 
 export type DashboardStatusFilter = DashboardAssignableStatus | "All";
 
