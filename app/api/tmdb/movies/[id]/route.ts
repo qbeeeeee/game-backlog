@@ -94,7 +94,9 @@ export async function GET(
       voteAverage: Number(payload.vote_average.toFixed(1)),
       coverUrl: buildTmdbImageUrl(payload.poster_path, "w500"),
       genres: payload.genres.map((genre) => genre.name),
-      cast: (payload.credits?.cast ?? []).slice(0, 8).map((actor) => actor.name),
+      cast: (payload.credits?.cast ?? [])
+        .slice(0, 8)
+        .map((actor) => actor.name),
       productionCompanies: payload.production_companies.map(
         (company) => company.name,
       ),

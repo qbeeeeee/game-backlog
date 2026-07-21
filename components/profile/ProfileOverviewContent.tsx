@@ -245,7 +245,7 @@ export function ProfileOverviewContent() {
                 </p>
               </div>
             ) : (
-              <div className="grid gap-3">
+              <div className="grid gap-3 overflow-y-auto max-h-150 scrollbar-arcade pr-3">
                 {filteredItems.map((item) => {
                   // If we are in "All", determine the specific category for THIS item
                   // so the status label reads correctly (e.g. "Seen" for movies, "Completed" for games)

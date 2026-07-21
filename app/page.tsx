@@ -2,15 +2,8 @@
 
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Separator } from "@/components/ui/separator";
 import Gameboy from "@/components/loggedout/Gameboy";
 
-// ---------------------------------------------------------------------------
-// Landing / Login Page
-// Retro arcade-themed login card. Clicking the button immediately redirects
-// the user to /dashboard — no real authentication is performed.
-// ---------------------------------------------------------------------------
 export default function LoginPage() {
   const router = useRouter();
 
@@ -19,7 +12,7 @@ export default function LoginPage() {
   };
 
   return (
-    <Gameboy>
+    <Gameboy isGameBoy={true}>
       <p className="animate-pulse text-yellow-400 text-sm tracking-widest uppercase">
         Press Start to Continue
       </p>
